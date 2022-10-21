@@ -1,0 +1,26 @@
+<center>
+    <h1>Ecart</h1>
+<form method="post">
+    {% csrf_token %}  
+    <button><a href="http://127.0.0.1:8000/ecommerce/search/">Search</a></button>
+</form>
+
+<table>
+    {% for i in products %}
+   <tr>
+    <br>
+       <th><h1>{{i.name}}<br></h1></th>
+   </tr>
+   <tr>
+       
+       <td><img src="{{i.image.url}}", width="200px"></td>
+       <td><a href="">{{i.name}}
+              </a><br>{{i.title}}<br>
+              Rs {{i.price}}<br>
+              total stocks {{i.in_stock}}<br>
+              <a><button>buy</button></a></td>
+   </tr>
+
+   {% endfor %}
+</table>
+</center>

@@ -1,0 +1,33 @@
+<html>
+    <button><a href="{% url 'logout' %}">logout</a></button>
+    <center>
+    <h1>Ecart</h1>
+<form method="post">
+    {% csrf_token %}  
+    
+    <input type="text" , name="need">
+    <button><a>Search</a></button>
+</form>
+    <br>
+    <br>
+   
+   <table>
+     {% for i in data %}
+     {% if i.in_stock > 0 %}
+    <tr>
+        <th><h1>{{i.name}}</h1></th>
+    </tr>
+    <tr>
+        
+        <td><img src="{{i.image.url}}", width="200px"></td>
+        <td><a href="">{{i.name}}
+               </a><br>{{i.title}}<br>
+               Rs {{i.price}}<br>
+               total stocks {{i.in_stock}}<br>
+               <a><button>buy</button></a></td>
+    </tr>
+     {% endif %}
+    {% endfor %}
+</table>
+</center>
+</html>
