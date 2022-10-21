@@ -1,16 +1,18 @@
 from email.policy import default
 from unittest.util import _MAX_LENGTH
+from attr import field
 from django import forms
 from Ecart.models import *
 
 class Prodect_form(forms.ModelForm):
     class Meta:
-        model = Product
+        model = Products_details
         fields = '__all__'
 
-class Search(forms.Form):
-
-    find = forms.CharField(max_length = 200)
+class Quantity(forms.ModelForm):
+    class Meta:
+        model = Carts
+        fields = ['quantity']
 
 
 
