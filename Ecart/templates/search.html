@@ -1,10 +1,14 @@
 <html>
-    <button><a href="{% url 'logout' %}">logout</a></button>
+    
+    <a href="{% url 'cart' %}"><p>[Cart page]</p></a>
+
     <center>
     <h1>Ecart</h1>
-<form method="post">
+    <button><a href="{% url 'logout' %}">logout</a></button>    
+    <br>
+<form method="get">
     {% csrf_token %}  
-    
+    <br>
     <input type="text" , name="need">
     <button><a>Search</a></button>
 </form>
@@ -19,12 +23,13 @@
     </tr>
     <tr>
         
-        <td><img src="{{i.image.url}}", width="200px"></td>
+        <td><img src="{{i.image.url}}", width="300px"></td>
         <td><a href="">{{i.name}}
                </a><br>{{i.title}}<br>
                Rs {{i.price}}<br>
                total stocks {{i.in_stock}}<br>
-               <a><button>buy</button></a></td>
+               {{form.as_p}}<a><button>apply</button></a>
+               <a href="{% url 'add_to_cart' i.id %}"><button>Add to cart</button></a></td>
     </tr>
      {% endif %}
     {% endfor %}
