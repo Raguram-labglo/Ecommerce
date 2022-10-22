@@ -56,9 +56,9 @@ def add_to_cart(request, id):
     product_selected = Products_details.objects.get(id = id)
     
     form = Quantity(request.POST or None, request.FILES or None)
-    context = {}
+    context = {'form':form}
     if form.is_valid():
-        context = {'form':form}
+       
         quantity_product = request.POST.get('quantity')
         price_of_product = product_selected.price * int(quantity_product)
         add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product ,quantity= quantity_product)
@@ -66,14 +66,16 @@ def add_to_cart(request, id):
     print(context)  
     return render(request, 'add_cart.html', context)
 
+@login_required()
 def Show_cart(request):
 
-    total_price = Carts.objects.filter(user = request.user).aggregate(Sum('product_id__price'))
-    cart_total_price = total_price['product_id__price__sum']
+    total_price = Carts.objects.filter(user = request.user).aggregate(Sum('price'))
+    cart_total_price = total_price['price__sum']
     cart_list = Carts.objects.filter(user = request.user)
     context = {'data':cart_list, 'total_price': cart_total_price}
     return render(request, 'cart.html', context)
 
+@login_required()
 def Remove_cart(request, id):
 
     cart_del = Carts.objects.get(id=id)
