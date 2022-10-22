@@ -51,24 +51,20 @@ def Search(request):
 
 @login_required()
 def add_to_cart(request, id):
-    
-    
-    product_selected = Products_details.objects.get(id = id)
-    
-    form = Quantity(request.POST or None, request.FILES or None)
-    context = {'form':form}
-    if form.is_valid():
-       
+    context = {}
+    if 'quantity' in request.POST:
+        product_selected = Products_details.objects.get(id = id)
         quantity_product = request.POST.get('quantity')
         price_of_product = product_selected.price * int(quantity_product)
         add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product ,quantity= quantity_product)
-        context['data'] = add_cart 
-    print(context)  
+        context['data'] = add_cart.product
+        context['pricedata'] = add_cart
+        print(context)  
     return render(request, 'add_cart.html', context)
 
 @login_required()
 def Show_cart(request):
-
+    quantity_product = request.POST.get('quantity')
     total_price = Carts.objects.filter(user = request.user).aggregate(Sum('price'))
     cart_total_price = total_price['price__sum']
     cart_list = Carts.objects.filter(user = request.user)
@@ -82,6 +78,9 @@ def Remove_cart(request, id):
     cart_del.delete()
     return render(request, 'cart.html')
 
-
-
-
+@login_required()
+def Order_plasement(request, id):
+    order_product = Carts.objects.get(id = id)
+    orders = Order.objects.create(user = request.user, order_items = order_product)
+    context = {'data':orders.order_items}
+    return render(request, 'order_page.html', context)

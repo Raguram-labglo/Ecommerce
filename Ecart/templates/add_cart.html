@@ -16,15 +16,18 @@
                <td><img src="{{data.image.url}}", width="300px"></td>
                <td><a href="">{{data.name}}
                       </a><br>{{data.title}}<br>
-                      Rs {{data.price}}<br>
-                      {{form.as_p}}<a href="{% url 'cart'%}"><button>apply</button></a>
+                      Rs {{pricedata.price}}<br>
+                      Quantity:
+                      <input type="number", name = 'quantity'><a href="{% url 'cart'%}"><button>cart</button></a>
                       total stocks {{data.in_stock}}<br></td>
+                      
            </tr>
         <tr>
-            <td rowspan="2"><h1>{{data.name}} added to {{user}} cart</h1></td>
+            <td ><h1>{{data.name}} added to {{user}} cart,<br> check cart page</h1></td>
         </tr>
         </table>
-    </form>          
+          
     </body>
 </center>
 </html>
+
