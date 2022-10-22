@@ -1,6 +1,7 @@
 <html>
     <center>
     <body>
+        <a href="{% url 'cart'%}"><p>[Cart page]</p></a>
         <form method="post">
             {% csrf_token %}
         <h1>MY CART</h1>
@@ -16,7 +17,7 @@
                <td><a href="">{{data.name}}
                       </a><br>{{data.title}}<br>
                       Rs {{data.price}}<br>
-                      {{form.as_p}}<a href="{% url 'cart' %}"><button>apply</button></a>
+                      {{form.as_p}}<a href="{% url 'cart'%}"><button>apply</button></a>
                       total stocks {{data.in_stock}}<br></td>
            </tr>
         <tr>
