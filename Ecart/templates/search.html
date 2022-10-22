@@ -6,7 +6,7 @@
     <h1>Ecart</h1>
     <button><a href="{% url 'logout' %}">logout</a></button>    
     <br>
-<form method="get">
+<form method="post">
     {% csrf_token %}  
     <br>
     <input type="text" , name="need">

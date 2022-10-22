@@ -42,10 +42,11 @@ def Product_list(request):
 
 @login_required()
 def Search(request):
-
+    
+    
     context = {}
     if 'need' in request.POST: 
-  
+        
         find = request.POST.get('need')
         all = Products_details.objects.all()
         context['product list'] = all
@@ -59,18 +60,32 @@ def Search(request):
     return render(request, 'search.html', context)
 
 @login_required()
-def add_to_cart(request, id, ):
+def add_to_cart(request, id):
+    
+    
     product_selected = Products_details.objects.get(id = id)
-    add_cart = Carts.objects.create(user = request.user, product=product_selected)
-    context = {'data': add_cart.product}
+    
+    form = Quantity(request.POST or None, request.FILES or None)
+    context = {}
+    if form.is_valid():
+        context = {'form':form}
+        quantity_product = request.POST.get('quantity')
+        print('qy.....', type(quantity_product))
+        price_of_product = product_selected.price * int(quantity_product)
+        print('isuhbfb................',price_of_product)
+        add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product ,quantity= quantity_product)
+        context['data'] = add_cart
+        
+        
+    print(context)  
     return render(request, 'add_cart.html', context)
 
 def Show_cart(request):
 
-   
     total_price = Carts.objects.filter(user = request.user).aggregate(Sum('product_id__price'))
     cart_total_price = total_price['product_id__price__sum']
     cart_list = Carts.objects.filter(user = request.user)
+     
     context = {'data':cart_list, 'total_price': cart_total_price}
     return render(request, 'cart.html', context)
 
@@ -92,3 +107,21 @@ def Remove_cart(request, id):
     carts_price = Carts.objects.filter(id = id).values()
     price = carts_price[0]['product_id__price'] * quantity
     #return render(request, 'cart.html', {'price_after_add':price})'''
+
+
+'''@login_required()
+def add_to_cart(request, id):
+    
+    
+    product_selected = Products_details.objects.get(id = id)
+    
+    form = Quantity(request.POST or None, request.FILES or None)
+    context = {'form':form}
+    if form.is_valid():
+        quantity = request.POST.get('quantity')
+        print('qy.....', quantity)
+        add_cart = Carts.objects.create(user = request.user, product=product_selected, quantity= quantity)
+        context['data'] = add_cart.product
+    print(context)  
+    return render(request, 'add_cart.html', context)
+'''
