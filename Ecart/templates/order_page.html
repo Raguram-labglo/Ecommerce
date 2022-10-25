@@ -9,11 +9,12 @@
                 <td><img src="{{ data.product.image.url}}", width="300px"></td>
                
                 <td>
-                    {{data.product.name}}<br>{{data.price}}<br>
+                    Product: {{data.product.name}}<br> price :{{data.price}}<br>
 
                     
                 </td>                      
             </tr>
+            <a href="{% url 'orders' %}">My Orders</a>
          </table>
         </center>
     </body>
