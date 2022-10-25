@@ -19,6 +19,5 @@ class Carts(models.Model):
 
 class Order(models.Model):
     user = models.CharField(max_length = 100)
-    order_items = models.ForeignKey(Carts, null = True, on_delete = models.CASCADE)
+    order_items = models.ManyToManyField(Carts)
     order_status = models.CharField(max_length = 60, choices = order, default = 'pending')
-        

@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.db.models import Avg, Max, Min, Sum
+from django.db.models import Sum
 
 def Form_in(request):
     
@@ -17,7 +17,6 @@ def Form_in(request):
             login(request,user)
             return redirect('show')
         else:
-            
             form = AuthenticationForm()
             messages.info(request, 'username or password is incorrect')
             return render(request,'log_in.html',{'form':form})
@@ -30,7 +29,7 @@ def Form_out(request):
     logout(request)
     return redirect('login')
 
-@login_required()
+@login_required
 def Product_list(request):
 
     all = Products_details.objects.all()
@@ -41,7 +40,6 @@ def Search(request):
 
     context = {}
     if 'need' in request.POST: 
-        
         find = request.POST.get('need')
         all = Products_details.objects.all()
         context['product list'] = all
@@ -52,26 +50,32 @@ def Search(request):
 @login_required()
 def add_to_cart(request, id):
     context = {}
-    if 'quantity' in request.POST:
-        product_selected = Products_details.objects.get(id = id)
-        quantity_product = request.POST.get('quantity')
-        price_of_product = product_selected.price * int(quantity_product)
-        add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product ,quantity= quantity_product)
-        context['data'] = add_cart.product
-        context['pricedata'] = add_cart
-        context['product'] = product_selected.name
-        print(context)  
+    product_selected = Products_details.objects.get(id = id)
+    price_of_product = product_selected.price
+    add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product)
+    context['data'] = add_cart.product
+    context['pricedata'] = add_cart
+    print(context)  
     return render(request, 'add_cart.html', context)
 
 @login_required()
 def Show_cart(request):
-    quantity_product = request.POST.get('quantity')
     total_price = Carts.objects.filter(user = request.user).aggregate(Sum('price'))
     cart_total_price = total_price['price__sum']
     cart_list = Carts.objects.filter(user = request.user)
+    quantity = request.POST.get('quantity')
+   # update_cart = Carts.objects.get(id = id)
+  #  update_cart.quantity = quantity
     context = {'data':cart_list, 'total_price': cart_total_price}
     return render(request, 'cart.html', context)
 
+def Update_cart(request,id):
+    quantity = request.POST.get('quantity')
+    update_cart = Carts.objects.get(id = id)
+    update_cart.quantity = quantity
+    update_cart.price = update_cart.product.price * int(quantity)
+    update_cart.save()
+    return render(request, 'cart.html')
 @login_required()
 def Remove_cart(request, id):
 
@@ -80,20 +84,25 @@ def Remove_cart(request, id):
     return render(request, 'cart.html')
 
 @login_required()
-def Order_plasement(request, id):
-    order_product = Carts.objects.get(id = id)
-    orders = Order.objects.create(user = request.user, order_items = order_product)
-    context = {'data':orders.order_items}
-    return render(request, 'order_page.html', context)
+def Order_plasement(request):
+    #order_product = Carts.objects.filter(user = request.user)
+    orders = Order.objects.get_or_create(user = request.user)
+    order_update = Order.objects.get(user = request.user)
+    order_update.order_items.add(*Carts.objects.filter(user = request.user))
+    order_update.save()
+    orders_details = Order.objects.filter(user = request.user)
+    
+    #context = {'data':orders.order_items}
+    return render(request, 'order_page.html')
 
 @login_required()
 def Order_details(request):
     get_order = Order.objects.filter(user = request.user)
-    total_orders_price = Order.objects.filter(user = request.user).aggregate(Sum('order_items_id__price'))
-    price = total_orders_price['order_items_id__price__sum']
-    tax = int(18/100*price)
-    tax_price = price +tax
-    context = {'order_product':get_order, 'total_price':price, 'tax':tax, 'final_price': tax_price }
+    #total_orders_price = Order.objects.filter(user = request.user).aggregate(Sum('order_items_id__price'))
+    #price = total_orders_price['order_items_id__price__sum']
+   # tax = int(18/100*price)
+   # tax_price = price +tax
+    context = {'order_product':get_order }
     return render(request, 'order_details.html', context)
 
 @login_required()
@@ -101,3 +110,10 @@ def Cancel_order(request, id):
     product = Order.objects.get(id = id)
     product.delete()
     return render(request, 'order_details.html')
+
+
+    '''   order_product = Carts.objects.get(id = id)
+    orders = Order.objects.create(user = request.user, order_items = order_product)
+
+    context = {'data':orders.order_items}
+    return render(request, 'order_page.html', context)'''

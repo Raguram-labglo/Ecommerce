@@ -1,5 +1,5 @@
 <html>
-    
+    <title>Search you want</title>
     <a href="{% url 'cart' %}"><p>[Cart page]</p></a>
 
     <center>
@@ -28,7 +28,6 @@
                </a><br>{{i.title}}<br>
                Rs {{i.price}}<br>
                total stocks {{i.in_stock}}<br>
-               {{form.as_p}}<a><button>apply</button></a>
                <a href="{% url 'add_to_cart' i.id %}"><button>Add to cart</button></a></td>
     </tr>
      {% endif %}

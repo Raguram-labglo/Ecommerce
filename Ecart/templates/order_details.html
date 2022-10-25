@@ -1,8 +1,9 @@
 <html>
+    <title>ordes</title>
     <body>
         
         <center>
-            <h1>orders</h1>
+            <h1>My Orders</h1>
         <table>
           
             {% for i in order_product %}
@@ -13,7 +14,8 @@
                     
                     Product: {{i.order_items.product.name}} <br>
                     price :{{i.order_items.price}}<br>  
-                    quantity: {{i.order_items.quantity}}
+                    quantity: {{i.order_items.quantity}}<br>
+                    Order status : {{i.order_status}}<br>
                     <a href="{% url 'cancel_order' i.id %}"><button>Cancel order</button></a>
                 </td> 
                                    
@@ -23,8 +25,8 @@
          </table>
          <p>Your orders price : {{total_price}}</p>
          <p>taxes added(18%) : + {{tax}}</p> 
-         <p>total price : Rs {{final_price}}</p>       
-         
+         <p>total price : Rs {{final_price}}</p> 
+         <button> Comtinue and pay </button>
         </center>
 
     </body>

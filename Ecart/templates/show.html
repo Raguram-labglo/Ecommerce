@@ -1,5 +1,6 @@
 <html>
-    <a href="{% url 'cart'%}"><p>[Cart page]</p></a>
+    <a href="{% url 'cart'%}">[..Cart page..]</a>
+    <a href="{% url 'orders' %}">[..My Orders..]</a>
 <center>
     <h1>Ecart</h1>
 <form method="get">
@@ -17,8 +18,8 @@
    <tr>
        
        <td><img src="{{i.image.url}}", width="200px"></td>
-       <td><a href="">{{i.name}}
-              </a><br>{{i.title}}<br>
+       <td>  {{i.name}}
+              <br>{{i.title}}<br>
               Rs {{i.price}}<br>
               total stocks {{i.in_stock}}<br>
               <a href="{% url 'add_to_cart' i.id %}"><button>Add to cart</button></a></td>
