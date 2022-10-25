@@ -59,6 +59,7 @@ def add_to_cart(request, id):
         add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product ,quantity= quantity_product)
         context['data'] = add_cart.product
         context['pricedata'] = add_cart
+        context['product'] = product_selected.name
         print(context)  
     return render(request, 'add_cart.html', context)
 
@@ -84,3 +85,19 @@ def Order_plasement(request, id):
     orders = Order.objects.create(user = request.user, order_items = order_product)
     context = {'data':orders.order_items}
     return render(request, 'order_page.html', context)
+
+@login_required()
+def Order_details(request):
+    get_order = Order.objects.filter(user = request.user)
+    total_orders_price = Order.objects.filter(user = request.user).aggregate(Sum('order_items_id__price'))
+    price = total_orders_price['order_items_id__price__sum']
+    tax = int(18/100*price)
+    tax_price = price +tax
+    context = {'order_product':get_order, 'total_price':price, 'tax':tax, 'final_price': tax_price }
+    return render(request, 'order_details.html', context)
+
+@login_required()
+def Cancel_order(request, id):
+    product = Order.objects.get(id = id)
+    product.delete()
+    return render(request, 'order_details.html')
