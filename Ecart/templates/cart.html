@@ -1,4 +1,6 @@
 <html>
+    <title>Cart</title>
+    <a href="{% url 'orders' %}">[..My Orders..]</a>
     <form method="post">
         {% csrf_token %}
     <center>
@@ -6,26 +8,29 @@
         
 
         <h1>CART</h1>
-        {% for i in data %}
-        <form>
+        
+        
         <table>
+            {% for i in data %}
            <tr>
                
                <td><img src="{{i.product.image.url}}", width="300px"></td>
               
-               <td><a href="">{{i.product.name}}
-                      </a><br>{{i.product.title}}<br>
+               <td>{{i.product.name}}<br>
+                     {{i.product.title}}<br>
                       Rs {{i.price}}<br>
                       Quantity : {{i.quantity}}<br>
                       total stocks {{i.product.in_stock}}<br>
-                      <a href="{% url 'order' i.id %}" ><p>buy</button></p><br><br>
+                      <form method="POST" action="{% url 'update_cart' i.id%}">
+                        {% csrf_token %}
+                      <input type="number"  value = {{i.quantity}}  name = 'quantity'><button type="submit">apply</button></a></form>
                       <a href="{% url 'del_cart' i.id %}">remove item</a><br>
-                      </td>                      
+                </td>                      
            </tr>
+           {% endfor %}
         </table>
-        </form>
-    </form>
-        {% endfor %}
+        <a href="{% url 'order' %}" ><p>buy</button></p>
+        
         <h1>you total cart amount Rs {{ total_price }}/-</h1>
              
     </body>
