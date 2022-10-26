@@ -1,31 +1,36 @@
 <html>
-    <title>ordes</title>
+    <title>orders</title>
     <body>
         
         <center>
             <h1>My Orders</h1>
         <table>
-          
-            {% for i in order_product %}
+        
+            
+            
             <tr>
-                
-                <td><img src="{{ i.order_items.product.image.url}}", width="300px"></td>
+                {% for j in data %}
+                <td><img src="{{ j.product.image.url}}", width="300px"></td>
                 <td>
+                
+                   <p>{{i.user}}
+                    {{j.id}}
+                    Product: {{j.product.name}} <br>
+                    price :{{j.product.price}}<br>  
+                    quantity: {{j.quantity}}<br>
+                    Order status : {{order_product.order_status}}<br>
                     
-                    Product: {{i.order_items.product.name}} <br>
-                    price :{{i.order_items.price}}<br>  
-                    quantity: {{i.order_items.quantity}}<br>
-                    Order status : {{i.order_status}}<br>
-                    <a href="{% url 'cancel_order' i.id %}"><button>Cancel order</button></a>
                 </td> 
                                    
             </tr>
+            {% endfor %}
             
-            {% endfor %}  
+            <a href="{% url 'cancel_order' order_product.id %}"><button>Cancel order</button></a>
          </table>
-         <p>Your orders price : {{total_price}}</p>
+         
+         <p>Your orders price : {{price}}</p>
          <p>taxes added(18%) : + {{tax}}</p> 
-         <p>total price : Rs {{final_price}}</p> 
+         <p>total price : Rs {{tax_price}}</p> 
          <button> Comtinue and pay </button>
         </center>
 
