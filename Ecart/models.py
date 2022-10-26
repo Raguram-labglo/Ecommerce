@@ -1,5 +1,3 @@
-from email.policy import default
-from random import choices
 from django.db import models
 from django.contrib.auth.models import User
 order = [('pending', 'pending'), ('shipping', 'shipping'), ('delivered', 'delivered')]
@@ -16,6 +14,7 @@ class Carts(models.Model):
     product = models.ForeignKey(Products_details,  null = True, on_delete = models.CASCADE)
     price = models.IntegerField(null = True)
     quantity = models.IntegerField(default = 1)
+    is_active = models.BooleanField(default = True)
 
 class Order(models.Model):
     user = models.CharField(max_length = 100)
