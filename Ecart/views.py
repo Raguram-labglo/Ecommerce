@@ -103,6 +103,6 @@ def Create_order(request):
 
 @login_required()
 def Cancel_order(request, id):
-    product = Order.objects.get(id = id)
+    product = Carts.objects.get(id = id)
     product.delete()
     return render(request, 'order_details.html') 
