@@ -9,8 +9,9 @@ class Products_details(models.Model):
     price = models.IntegerField()
     in_stock = models.IntegerField()
     
+    
 class Carts(models.Model):
-    user = models.CharField(max_length = 50, null = True)
+    user = models.CharField(max_length = 50)
     product = models.ForeignKey(Products_details,  null = True, on_delete = models.CASCADE)
     price = models.IntegerField(null = True)
     quantity = models.IntegerField(default = 1)
@@ -20,3 +21,8 @@ class Order(models.Model):
     user = models.CharField(max_length = 100)
     order_items = models.ManyToManyField(Carts)
     order_status = models.CharField(max_length = 60, choices = order, default = 'pending')
+
+class Wish_list(models.Model):
+    user = models.CharField(max_length = 100)
+    favourite = models.ManyToManyField(Products_details)
+    wished = models.BooleanField(default = True)

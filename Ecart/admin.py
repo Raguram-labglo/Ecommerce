@@ -11,3 +11,5 @@ admin.site.register(Carts, Cart_list)
 class Order_list(admin.ModelAdmin):
     list_display = ('id','user', 'order_status')
 admin.site.register(Order, Order_list)
+
+admin.site.register(Wish_list)
