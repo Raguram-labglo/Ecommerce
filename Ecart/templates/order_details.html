@@ -1,38 +1,40 @@
 <html>
-    <title>orders</title>
-    <body>
-        
-        <center>
-            <h1>My Orders</h1>
+<title>orders</title>
+
+<body>
+
+    <center>
+        <h1>My Orders</h1>
         <table>
-        
-            
-            
+
+
+
             <tr>
                 {% for j in data %}
-                <td><img src="{{ j.product.image.url}}", width="300px"></td>
+                <td><img src="{{ j.product.image.url}}" , width="300px"></td>
                 <td>
-                
-                   <p>{{i.user}}
-                    {{j.id}}
-                    Product: {{j.product.name}} <br>
-                    price :{{j.product.price}}<br>  
-                    quantity: {{j.quantity}}<br>
-                    Order status : {{order_product.order_status}}<br>
-                    
-                </td> 
-                                   
+
+                    <p>
+
+                        Product: {{j.product.name}} <br>
+                        price :{{j.product.price}}<br>
+                        quantity: {{j.quantity}}<br>
+                        Order status : {{order_product.order_status}}<br>
+                        <a href="{% url 'cancel_order' j.id%}"><button>Cancel order</button></a>
+
+                </td>
+
             </tr>
             {% endfor %}
-            
-            <a href="{% url 'cancel_order' order_product.id %}"><button>Cancel order</button></a>
-         </table>
-         
-         <p>Your orders price : {{price}}</p>
-         <p>taxes added(18%) : + {{tax}}</p> 
-         <p>total price : Rs {{tax_price}}</p> 
-         <button> Comtinue and pay </button>
-        </center>
 
-    </body>
+        </table>
+
+        <p>Your orders price : {{price}}</p>
+        <p>taxes added(18%) : + {{tax}}</p><hr>
+        <h2 style="color: green;">total price : Rs {{tax_price}}</h2>
+        <button> Comtinue and pay </button>
+    </center>
+
+</body>
+
 </html>
