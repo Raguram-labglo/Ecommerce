@@ -32,8 +32,11 @@ def Form_out(request):
 @login_required
 def Product_list(request):
 
-    all = Products_details.objects.all()
-    return render(request, 'show.html', {'products':all})
+    all_product = Products_details.objects.all()
+    wish = Wish_list.objects.get(user = request.user)
+    wish_product = wish.favourite.all()
+    alredy_wish = list(wish_product)
+    return render(request, 'show.html', {'products':all_product, 'wish':wish_product, 'alredy':alredy_wish})
 
 @login_required()
 def Search(request):
@@ -55,11 +58,11 @@ def add_to_cart(request, id):
     add_cart = Carts.objects.create(user = request.user, product=product_selected , price = price_of_product)
     context['data'] = add_cart.product
     context['pricedata'] = add_cart
-    print(context)  
     return render(request, 'add_cart.html', context)
 
 @login_required()
 def Show_cart(request):
+
     cart_list = Carts.objects.filter(Q(user = request.user) & Q(is_active = True))
     total_price = cart_list.aggregate(Sum('price'))
     cart_total_price = total_price['price__sum']
@@ -86,12 +89,16 @@ def Order_details(request):
     get_order = Order.objects.get(user = request.user)
     total_orders_price = Order.objects.filter(user = request.user).aggregate(Sum('order_items__price'))
     price = total_orders_price['order_items__price__sum']
+    if price == None:
+        context = {'message': 'your order page is empty'}
+        return render(request, 'order_details.html', context)
     tax = int(18/100*price)
     tax_price = price +tax
     order_product = get_order.order_items.all()
     context = {'order_product':get_order, 'data' : order_product, 'price':price, 'tax':tax, 'tax_price':tax_price}
     return render(request, 'order_details.html', context)
 
+@login_required
 def Create_order(request):
     orders = Order.objects.get_or_create(user = request.user)
     order_update = Order.objects.get(user = request.user)
@@ -106,3 +113,20 @@ def Cancel_order(request, id):
     product = Carts.objects.get(id = id)
     product.delete()
     return render(request, 'order_details.html') 
+
+@login_required
+def Wish_list_products(request, id):
+
+    wish_product = Products_details.objects.get(id = id)
+    
+    obj,add_wish = Wish_list.objects.get_or_create(user = request.user)
+    add_fav = Wish_list.objects.get(user = request.user)
+    add_fav.favourite.add(Products_details.objects.get(id = id))
+    return render (request, 'wish_page.html', {'wish': wish_product})
+
+@login_required()
+def Show_wish(request):
+
+    wished_products = Wish_list.objects.get(user = request.user)
+    context = {'wish_list':wished_products.favourite.all()}
+    return render(request, 'wish_list.html', context)

@@ -12,8 +12,7 @@ urlpatterns = [path('show/', views.Product_list, name = 'show'),
                path('orders/', views.Order_details, name = 'orders'),
                path('cancel_order/<int:id>',views.Cancel_order, name = 'cancel_order'),
                path('update_cart/<int:id>', views.Update_cart, name = 'update_cart'),
-               path('create_order/', views.Create_order, name = 'create_order')
+               path('create_order/', views.Create_order, name = 'create_order'),
+               path('wish/<int:id>', views.Wish_list_products, name = 'wish'),
+               path('wish_list/', views.Show_wish, name = 'wish_list')
                ]
-
-
-'''path('add/', views.Add_product, name= 'add'),path('new_cart/<int:id>',views.Product_quantity, name = 'new_cart')'''
