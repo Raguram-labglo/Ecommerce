@@ -106,13 +106,13 @@ def Create_order(request):
     inactive  = Carts.objects.filter(user = request.user)
     inactive.update(is_active = False)
     order_update.save()
-    return redirect('cart')
+    return redirect(Order_details)
 
 @login_required()
 def Cancel_order(request, id):
     product = Carts.objects.get(id = id)
     product.delete()
-    return render(request, 'order_details.html') 
+    return redirect(Order_details) 
 
 @login_required
 def Wish_list_products(request, id):
@@ -122,7 +122,7 @@ def Wish_list_products(request, id):
     obj,add_wish = Wish_list.objects.get_or_create(user = request.user)
     add_fav = Wish_list.objects.get(user = request.user)
     add_fav.favourite.add(Products_details.objects.get(id = id))
-    return render (request, 'wish_page.html', {'wish': wish_product})
+    return redirect(Product_list)
 
 @login_required()
 def Show_wish(request):
@@ -130,3 +130,10 @@ def Show_wish(request):
     wished_products = Wish_list.objects.get(user = request.user)
     context = {'wish_list':wished_products.favourite.all()}
     return render(request, 'wish_list.html', context)
+
+@login_required()
+def Remove_wish(request, id):
+    product_qs = Products_details.objects.get(id = id)
+    wish_qs = Wish_list.objects.get(user = request.user)
+    rm_wish = wish_qs.favourite.remove(product_qs)
+    return redirect(Product_list)

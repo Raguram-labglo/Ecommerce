@@ -1,7 +1,9 @@
 <html>
+    <a href="{% url 'show' %}">[..Home..]</a>
+    <a href="{% url 'wish_list' %}">[..Wish list..]</a>
 <title>Cart</title>
 <a href="{% url 'orders' %}">[..My Orders..]</a>
-
+<button><a href="{% url 'logout' %}">logout</a></button> 
     {% csrf_token %}
     <center>
 
